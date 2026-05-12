@@ -1,0 +1,7 @@
+"""Django app configuration for auditoria."""
+from django.apps import AppConfig
+
+
+class AuditoriaConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.auditoria"
