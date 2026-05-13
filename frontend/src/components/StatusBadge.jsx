@@ -26,6 +26,12 @@ const toneByStatus = {
   pausada: 'bg-orange-50 text-orange-700',
   finalizada: 'bg-slate-100 text-slate-700',
   faturada: 'bg-emerald-100 text-emerald-800',
+  em_analise: 'bg-amber-50 text-amber-700',
+  enviado: 'bg-sky-50 text-sky-700',
+  aprovado: 'bg-emerald-50 text-emerald-700',
+  reprovado: 'bg-red-50 text-red-700',
+  expirado: 'bg-orange-50 text-orange-700',
+  convertido_os: 'bg-indigo-50 text-indigo-700',
 }
 
 export function StatusBadge({ status }) {

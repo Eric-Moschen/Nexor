@@ -27,6 +27,9 @@ import { OperationNatureList } from '../pages/fiscal/OperationNatureList.jsx'
 import { ServiceOrderDetail } from '../pages/ordensServico/ServiceOrderDetail.jsx'
 import { ServiceOrderForm } from '../pages/ordensServico/ServiceOrderForm.jsx'
 import { ServiceOrderList } from '../pages/ordensServico/ServiceOrderList.jsx'
+import { BudgetDetail } from '../pages/orcamentos/BudgetDetail.jsx'
+import { BudgetForm } from '../pages/orcamentos/BudgetForm.jsx'
+import { BudgetList } from '../pages/orcamentos/BudgetList.jsx'
 
 export function AppRoutes() {
   return (
@@ -56,7 +59,10 @@ export function AppRoutes() {
         <Route path="ordens-servico" element={<ServiceOrderList />} />
         <Route path="ordens-servico/nova" element={<ServiceOrderForm />} />
         <Route path="ordens-servico/:id" element={<ServiceOrderDetail />} />
-        {ERP_MODULES.filter((module) => !['/estoque', '/compras', '/financeiro', '/fiscal', '/ordens-servico'].includes(module.path)).map((module) => (
+        <Route path="orcamentos" element={<BudgetList />} />
+        <Route path="orcamentos/novo" element={<BudgetForm />} />
+        <Route path="orcamentos/:id" element={<BudgetDetail />} />
+        {ERP_MODULES.filter((module) => !['/estoque', '/compras', '/financeiro', '/fiscal', '/ordens-servico', '/orcamentos'].includes(module.path)).map((module) => (
           <Route key={module.path} path={module.path.slice(1)} element={<ModulePage module={module} />} />
         ))}
       </Route>
