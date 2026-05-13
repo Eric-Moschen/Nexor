@@ -1,5 +1,13 @@
-from apps.fornecedores.models import FornecedoresRecord
+from apps.fornecedores.models import Fornecedor
 
 
-def create_record(*, name, description="", created_by=None):
-    return FornecedoresRecord.objects.create(name=name, description=description, created_by=created_by)
+def criar_fornecedor(*, razao_social, documento, nome_fantasia="", email="", telefone="", created_by=None):
+    return Fornecedor.objects.create(
+        razao_social=razao_social,
+        nome_fantasia=nome_fantasia,
+        documento=documento,
+        email=email,
+        telefone=telefone,
+        created_by=created_by,
+        updated_by=created_by,
+    )

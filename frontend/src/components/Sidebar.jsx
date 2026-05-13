@@ -7,6 +7,7 @@ const items = [
   { to: '/estoque/movimentacoes', label: 'Movimentar estoque', icon: ClipboardList },
   { to: '/estoque/historico', label: 'Historico estoque', icon: FileText },
   { to: '/compras', label: 'Compras', icon: ClipboardList },
+  { to: '/compras/pedidos', label: 'Pedidos de compra', icon: Truck },
   { to: '/financeiro', label: 'Financeiro', icon: Landmark },
   { to: '/fiscal', label: 'Fiscal', icon: ReceiptText },
   { to: '/ordens-servico', label: 'Ordens de Servico', icon: ShieldCheck },

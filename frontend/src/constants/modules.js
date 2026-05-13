@@ -1,6 +1,6 @@
 export const ERP_MODULES = [
   { name: 'Estoque', path: '/estoque', status: 'Implementado' },
-  { name: 'Compras', path: '/compras', status: 'Preparado' },
+  { name: 'Compras', path: '/compras', status: 'Implementado' },
   { name: 'Financeiro', path: '/financeiro', status: 'Preparado' },
   { name: 'Fiscal', path: '/fiscal', status: 'Preparado' },
   { name: 'Ordens de Servico', path: '/ordens-servico', status: 'Preparado' },
