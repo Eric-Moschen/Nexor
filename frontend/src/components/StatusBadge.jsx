@@ -9,6 +9,10 @@ const toneByStatus = {
   enviado_fornecedor: 'bg-violet-50 text-violet-700',
   parcialmente_recebido: 'bg-amber-50 text-amber-700',
   recebido: 'bg-emerald-50 text-emerald-700',
+  pendente: 'bg-amber-50 text-amber-700',
+  parcialmente_pago: 'bg-orange-50 text-orange-700',
+  pago: 'bg-emerald-50 text-emerald-700',
+  vencido: 'bg-red-50 text-red-700',
 }
 
 export function StatusBadge({ status }) {

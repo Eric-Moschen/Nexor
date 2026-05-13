@@ -14,6 +14,11 @@ import { PurchaseReceipt } from '../pages/compras/PurchaseReceipt.jsx'
 import { PurchaseRequestDetail } from '../pages/compras/PurchaseRequestDetail.jsx'
 import { PurchaseRequestForm } from '../pages/compras/PurchaseRequestForm.jsx'
 import { PurchaseRequestList } from '../pages/compras/PurchaseRequestList.jsx'
+import { CashFlow } from '../pages/financeiro/CashFlow.jsx'
+import { FinancialDashboard } from '../pages/financeiro/FinancialDashboard.jsx'
+import { FinancialEntryForm } from '../pages/financeiro/FinancialEntryForm.jsx'
+import { PayableList } from '../pages/financeiro/PayableList.jsx'
+import { ReceivableList } from '../pages/financeiro/ReceivableList.jsx'
 
 export function AppRoutes() {
   return (
@@ -30,7 +35,12 @@ export function AppRoutes() {
         <Route path="compras/pedidos" element={<PurchaseOrderList />} />
         <Route path="compras/pedidos/:id" element={<PurchaseOrderDetail />} />
         <Route path="compras/pedidos/:id/recebimento" element={<PurchaseReceipt />} />
-        {ERP_MODULES.filter((module) => !['/estoque', '/compras'].includes(module.path)).map((module) => (
+        <Route path="financeiro" element={<FinancialDashboard />} />
+        <Route path="financeiro/contas-pagar" element={<PayableList />} />
+        <Route path="financeiro/contas-receber" element={<ReceivableList />} />
+        <Route path="financeiro/cadastro/:type" element={<FinancialEntryForm />} />
+        <Route path="financeiro/fluxo-caixa" element={<CashFlow />} />
+        {ERP_MODULES.filter((module) => !['/estoque', '/compras', '/financeiro'].includes(module.path)).map((module) => (
           <Route key={module.path} path={module.path.slice(1)} element={<ModulePage module={module} />} />
         ))}
       </Route>
