@@ -13,6 +13,12 @@ const toneByStatus = {
   parcialmente_pago: 'bg-orange-50 text-orange-700',
   pago: 'bg-emerald-50 text-emerald-700',
   vencido: 'bg-red-50 text-red-700',
+  validada: 'bg-sky-50 text-sky-700',
+  assinada: 'bg-indigo-50 text-indigo-700',
+  enviada: 'bg-violet-50 text-violet-700',
+  autorizada: 'bg-emerald-50 text-emerald-700',
+  rejeitada: 'bg-red-50 text-red-700',
+  denegada: 'bg-red-100 text-red-800',
 }
 
 export function StatusBadge({ status }) {

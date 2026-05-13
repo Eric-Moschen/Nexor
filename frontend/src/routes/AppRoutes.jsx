@@ -19,6 +19,11 @@ import { FinancialDashboard } from '../pages/financeiro/FinancialDashboard.jsx'
 import { FinancialEntryForm } from '../pages/financeiro/FinancialEntryForm.jsx'
 import { PayableList } from '../pages/financeiro/PayableList.jsx'
 import { ReceivableList } from '../pages/financeiro/ReceivableList.jsx'
+import { FiscalCompanyConfig } from '../pages/fiscal/FiscalCompanyConfig.jsx'
+import { NFeDetail } from '../pages/fiscal/NFeDetail.jsx'
+import { NFeForm } from '../pages/fiscal/NFeForm.jsx'
+import { NFeList } from '../pages/fiscal/NFeList.jsx'
+import { OperationNatureList } from '../pages/fiscal/OperationNatureList.jsx'
 
 export function AppRoutes() {
   return (
@@ -40,7 +45,12 @@ export function AppRoutes() {
         <Route path="financeiro/contas-receber" element={<ReceivableList />} />
         <Route path="financeiro/cadastro/:type" element={<FinancialEntryForm />} />
         <Route path="financeiro/fluxo-caixa" element={<CashFlow />} />
-        {ERP_MODULES.filter((module) => !['/estoque', '/compras', '/financeiro'].includes(module.path)).map((module) => (
+        <Route path="fiscal" element={<NFeList />} />
+        <Route path="fiscal/nfe/nova" element={<NFeForm />} />
+        <Route path="fiscal/nfe/:id" element={<NFeDetail />} />
+        <Route path="fiscal/empresa" element={<FiscalCompanyConfig />} />
+        <Route path="fiscal/naturezas" element={<OperationNatureList />} />
+        {ERP_MODULES.filter((module) => !['/estoque', '/compras', '/financeiro', '/fiscal'].includes(module.path)).map((module) => (
           <Route key={module.path} path={module.path.slice(1)} element={<ModulePage module={module} />} />
         ))}
       </Route>
