@@ -1,10 +1,20 @@
 from rest_framework import serializers
 
-from apps.clientes.models import ClientesRecord
+from apps.clientes.models import Cliente
 
 
-class ClientesRecordSerializer(serializers.ModelSerializer):
+class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ClientesRecord
-        fields = ("id", "name", "description", "is_active", "created_at", "updated_at")
+        model = Cliente
+        fields = (
+            "id",
+            "razao_social",
+            "nome_fantasia",
+            "documento",
+            "email",
+            "telefone",
+            "is_active",
+            "created_at",
+            "updated_at",
+        )
         read_only_fields = ("id", "created_at", "updated_at")

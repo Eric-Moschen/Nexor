@@ -9,6 +9,8 @@ const items = [
   { to: '/compras', label: 'Compras', icon: ClipboardList },
   { to: '/compras/pedidos', label: 'Pedidos de compra', icon: Truck },
   { to: '/financeiro', label: 'Financeiro', icon: Landmark },
+  { to: '/financeiro/contas-pagar', label: 'Contas a pagar', icon: Landmark },
+  { to: '/financeiro/contas-receber', label: 'Contas a receber', icon: ReceiptText },
   { to: '/fiscal', label: 'Fiscal', icon: ReceiptText },
   { to: '/ordens-servico', label: 'Ordens de Servico', icon: ShieldCheck },
   { to: '/clientes', label: 'Clientes', icon: Users },
