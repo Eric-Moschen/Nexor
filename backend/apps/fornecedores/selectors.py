@@ -1,5 +1,5 @@
-from apps.fornecedores.models import FornecedoresRecord
+from apps.fornecedores.models import Fornecedor
 
 
-def list_records():
-    return FornecedoresRecord.objects.filter(is_active=True).order_by("name")
+def listar_fornecedores():
+    return Fornecedor.objects.filter(is_active=True).order_by("razao_social")
