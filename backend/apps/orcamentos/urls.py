@@ -1,9 +1,9 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.ordens_servico.views import OrdemServicoViewSet
+from apps.orcamentos.views import OrcamentoViewSet
 
-app_name = "ordens_servico"
+app_name = "orcamentos"
 router = DefaultRouter()
-router.register("", OrdemServicoViewSet, basename="ordem-servico")
+router.register("", OrcamentoViewSet, basename="orcamento")
 urlpatterns = [path("", include(router.urls))]

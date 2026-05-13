@@ -31,6 +31,7 @@ LOCAL_APPS = [
     "apps.financeiro",
     "apps.fiscal",
     "apps.ordens_servico",
+    "apps.orcamentos",
     "apps.clientes",
     "apps.fornecedores",
     "apps.relatorios",

@@ -15,6 +15,7 @@ const items = [
   { to: '/fiscal/empresa', label: 'Empresa fiscal', icon: ShieldCheck },
   { to: '/fiscal/naturezas', label: 'Naturezas fiscais', icon: FileText },
   { to: '/ordens-servico', label: 'Ordens de Servico', icon: ShieldCheck },
+  { to: '/orcamentos', label: 'Orcamentos', icon: FileText },
   { to: '/clientes', label: 'Clientes', icon: Users },
   { to: '/fornecedores', label: 'Fornecedores', icon: Truck },
   { to: '/relatorios', label: 'Relatorios', icon: FileText },

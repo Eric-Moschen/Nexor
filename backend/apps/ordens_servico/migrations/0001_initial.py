@@ -1,0 +1,143 @@
+# Generated for the Prompt 06 service orders module baseline.
+
+import decimal
+import django.core.validators
+import django.db.models.deletion
+from django.conf import settings
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+    initial = True
+
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ("clientes", "0001_initial"),
+        ("estoque", "0001_initial"),
+        ("financeiro", "0001_initial"),
+        ("fiscal", "0001_initial"),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name="OrdemServico",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("is_active", models.BooleanField(db_index=True, default=True)),
+                ("deleted_at", models.DateTimeField(blank=True, null=True)),
+                ("numero", models.CharField(db_index=True, max_length=30, unique=True)),
+                ("titulo", models.CharField(db_index=True, max_length=180)),
+                ("descricao_servico", models.TextField()),
+                ("tipo_servico", models.CharField(db_index=True, max_length=80)),
+                ("prioridade", models.CharField(choices=[("baixa", "Baixa"), ("media", "Media"), ("alta", "Alta"), ("urgente", "Urgente")], db_index=True, default="media", max_length=20)),
+                ("status", models.CharField(choices=[("rascunho", "Rascunho"), ("aberta", "Aberta"), ("em_aprovacao", "Em aprovacao"), ("aprovada", "Aprovada"), ("em_execucao", "Em execucao"), ("pausada", "Pausada"), ("finalizada", "Finalizada"), ("cancelada", "Cancelada"), ("faturada", "Faturada")], db_index=True, default="rascunho", max_length=30)),
+                ("data_abertura", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("data_prevista", models.DateField(blank=True, db_index=True, null=True)),
+                ("data_inicio", models.DateTimeField(blank=True, null=True)),
+                ("data_finalizacao", models.DateTimeField(blank=True, null=True)),
+                ("observacoes", models.TextField(blank=True)),
+                ("valor_estimado", models.DecimalField(decimal_places=2, default=decimal.Decimal("0.00"), max_digits=14, validators=[django.core.validators.MinValueValidator(decimal.Decimal("0"))])),
+                ("valor_final", models.DecimalField(decimal_places=2, default=decimal.Decimal("0.00"), max_digits=14, validators=[django.core.validators.MinValueValidator(decimal.Decimal("0"))])),
+                ("custo_materiais", models.DecimalField(decimal_places=2, default=decimal.Decimal("0.00"), max_digits=14, validators=[django.core.validators.MinValueValidator(decimal.Decimal("0"))])),
+                ("custo_mao_obra", models.DecimalField(decimal_places=2, default=decimal.Decimal("0.00"), max_digits=14, validators=[django.core.validators.MinValueValidator(decimal.Decimal("0"))])),
+                ("custo_total", models.DecimalField(decimal_places=2, default=decimal.Decimal("0.00"), max_digits=14, validators=[django.core.validators.MinValueValidator(decimal.Decimal("0"))])),
+                ("categoria_financeira", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name="ordens_servico", to="financeiro.categoriafinanceira")),
+                ("centro_custo", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name="ordens_servico", to="financeiro.centrocusto")),
+                ("cliente", models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name="ordens_servico", to="clientes.cliente")),
+                ("conta_receber", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name="ordens_servico", to="financeiro.contareceber")),
+                ("created_by", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="ordemservico_created", to=settings.AUTH_USER_MODEL)),
+                ("nota_fiscal", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name="ordens_servico", to="fiscal.notafiscal")),
+                ("responsavel_tecnico", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="ordens_responsavel", to=settings.AUTH_USER_MODEL)),
+                ("updated_by", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="ordemservico_updated", to=settings.AUTH_USER_MODEL)),
+                ("usuario_criador", models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name="ordens_criadas", to=settings.AUTH_USER_MODEL)),
+            ],
+            options={"ordering": ["-data_abertura", "-id"]},
+        ),
+        migrations.CreateModel(
+            name="ItemServico",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("descricao", models.CharField(max_length=220)),
+                ("quantidade", models.DecimalField(decimal_places=4, max_digits=14, validators=[django.core.validators.MinValueValidator(decimal.Decimal("0.0001"))])),
+                ("valor_unitario", models.DecimalField(decimal_places=2, max_digits=14, validators=[django.core.validators.MinValueValidator(decimal.Decimal("0"))])),
+                ("valor_total", models.DecimalField(decimal_places=2, default=decimal.Decimal("0.00"), max_digits=14)),
+                ("observacao", models.TextField(blank=True)),
+                ("ordem_servico", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="itens", to="ordens_servico.ordemservico")),
+            ],
+            options={"ordering": ["id"]},
+        ),
+        migrations.CreateModel(
+            name="MaterialUtilizadoOS",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("quantidade", models.DecimalField(decimal_places=4, max_digits=14, validators=[django.core.validators.MinValueValidator(decimal.Decimal("0.0001"))])),
+                ("custo_unitario", models.DecimalField(decimal_places=4, max_digits=14, validators=[django.core.validators.MinValueValidator(decimal.Decimal("0"))])),
+                ("custo_total", models.DecimalField(decimal_places=2, default=decimal.Decimal("0.00"), max_digits=14)),
+                ("data_utilizacao", models.DateTimeField(auto_now_add=True, db_index=True)),
+                ("ordem_servico", models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name="materiais", to="ordens_servico.ordemservico")),
+                ("produto", models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name="materiais_os", to="estoque.produto")),
+                ("usuario_responsavel", models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name="materiais_os", to=settings.AUTH_USER_MODEL)),
+            ],
+            options={"ordering": ["-data_utilizacao", "-id"]},
+        ),
+        migrations.CreateModel(
+            name="ApontamentoHorasOS",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("data", models.DateField(db_index=True)),
+                ("hora_inicio", models.TimeField()),
+                ("hora_fim", models.TimeField()),
+                ("total_horas", models.DecimalField(decimal_places=2, default=decimal.Decimal("0.00"), max_digits=8)),
+                ("tipo_hora", models.CharField(choices=[("normal", "Normal"), ("extra_50", "Extra 50%"), ("extra_100", "Extra 100%")], default="normal", max_length=20)),
+                ("custo_hora", models.DecimalField(decimal_places=2, default=decimal.Decimal("0.00"), max_digits=14, validators=[django.core.validators.MinValueValidator(decimal.Decimal("0"))])),
+                ("custo_total", models.DecimalField(decimal_places=2, default=decimal.Decimal("0.00"), max_digits=14)),
+                ("observacao", models.TextField(blank=True)),
+                ("colaborador", models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name="apontamentos_os", to=settings.AUTH_USER_MODEL)),
+                ("ordem_servico", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="apontamentos", to="ordens_servico.ordemservico")),
+            ],
+            options={"ordering": ["-data", "-hora_inicio", "-id"]},
+        ),
+        migrations.CreateModel(
+            name="HistoricoOS",
+            fields=[
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("tipo_evento", models.CharField(choices=[("criacao", "Criacao"), ("envio_aprovacao", "Envio para aprovacao"), ("aprovacao", "Aprovacao"), ("inicio", "Inicio"), ("pausa", "Pausa"), ("retomada", "Retomada"), ("material", "Uso de material"), ("apontamento", "Apontamento de horas"), ("alteracao_status", "Alteracao de status"), ("finalizacao", "Finalizacao"), ("cancelamento", "Cancelamento"), ("faturamento", "Faturamento"), ("estorno_material", "Estorno de material")], db_index=True, max_length=30)),
+                ("descricao", models.TextField()),
+                ("status_anterior", models.CharField(blank=True, max_length=30)),
+                ("status_novo", models.CharField(blank=True, max_length=30)),
+                ("dados_extras", models.JSONField(blank=True, default=dict)),
+                ("ordem_servico", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="historico", to="ordens_servico.ordemservico")),
+                ("usuario_responsavel", models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name="historicos_os", to=settings.AUTH_USER_MODEL)),
+            ],
+            options={"ordering": ["-created_at", "-id"]},
+        ),
+        migrations.AddConstraint(model_name="ordemservico", constraint=models.CheckConstraint(check=models.Q(valor_estimado__gte=0), name="os_valor_estimado_gte_0")),
+        migrations.AddConstraint(model_name="ordemservico", constraint=models.CheckConstraint(check=models.Q(valor_final__gte=0), name="os_valor_final_gte_0")),
+        migrations.AddConstraint(model_name="ordemservico", constraint=models.CheckConstraint(check=models.Q(custo_materiais__gte=0), name="os_custo_materiais_gte_0")),
+        migrations.AddConstraint(model_name="ordemservico", constraint=models.CheckConstraint(check=models.Q(custo_mao_obra__gte=0), name="os_custo_mao_obra_gte_0")),
+        migrations.AddConstraint(model_name="ordemservico", constraint=models.CheckConstraint(check=models.Q(custo_total__gte=0), name="os_custo_total_gte_0")),
+        migrations.AddIndex(model_name="ordemservico", index=models.Index(fields=["status", "data_abertura"], name="ordens_ser_status_e73f88_idx")),
+        migrations.AddIndex(model_name="ordemservico", index=models.Index(fields=["cliente", "status"], name="ordens_ser_cliente_adbce0_idx")),
+        migrations.AddIndex(model_name="ordemservico", index=models.Index(fields=["prioridade", "status"], name="ordens_ser_priorid_e31f97_idx")),
+        migrations.AddIndex(model_name="ordemservico", index=models.Index(fields=["data_prevista"], name="ordens_ser_data_pr_865c41_idx")),
+        migrations.AddConstraint(model_name="itemservico", constraint=models.CheckConstraint(check=models.Q(quantidade__gt=0), name="os_item_quantidade_gt_0")),
+        migrations.AddConstraint(model_name="itemservico", constraint=models.CheckConstraint(check=models.Q(valor_unitario__gte=0), name="os_item_valor_unitario_gte_0")),
+        migrations.AddConstraint(model_name="materialutilizadoos", constraint=models.CheckConstraint(check=models.Q(quantidade__gt=0), name="os_material_quantidade_gt_0")),
+        migrations.AddConstraint(model_name="materialutilizadoos", constraint=models.CheckConstraint(check=models.Q(custo_unitario__gte=0), name="os_material_custo_unitario_gte_0")),
+        migrations.AddIndex(model_name="materialutilizadoos", index=models.Index(fields=["ordem_servico", "produto"], name="ordens_ser_ordem_s_a5d2cb_idx")),
+        migrations.AddConstraint(model_name="apontamentohorasos", constraint=models.CheckConstraint(check=models.Q(hora_fim__gt=models.F("hora_inicio")), name="os_apontamento_hora_fim_gt_inicio")),
+        migrations.AddConstraint(model_name="apontamentohorasos", constraint=models.CheckConstraint(check=models.Q(total_horas__gte=0), name="os_apontamento_total_horas_gte_0")),
+        migrations.AddIndex(model_name="apontamentohorasos", index=models.Index(fields=["colaborador", "data"], name="ordens_ser_colabor_6d3cc4_idx")),
+        migrations.AddIndex(model_name="apontamentohorasos", index=models.Index(fields=["ordem_servico", "data"], name="ordens_ser_ordem_s_2f149f_idx")),
+        migrations.AddIndex(model_name="historicoos", index=models.Index(fields=["ordem_servico", "tipo_evento"], name="ordens_ser_ordem_s_24b499_idx")),
+    ]
