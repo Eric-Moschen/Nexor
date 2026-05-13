@@ -4,6 +4,8 @@ import { Boxes, ClipboardList, FileText, Landmark, LayoutDashboard, ReceiptText,
 const items = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/estoque', label: 'Estoque', icon: Boxes },
+  { to: '/estoque/movimentacoes', label: 'Movimentar estoque', icon: ClipboardList },
+  { to: '/estoque/historico', label: 'Historico estoque', icon: FileText },
   { to: '/compras', label: 'Compras', icon: ClipboardList },
   { to: '/financeiro', label: 'Financeiro', icon: Landmark },
   { to: '/fiscal', label: 'Fiscal', icon: ReceiptText },
