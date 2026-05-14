@@ -38,12 +38,24 @@ import { SupplierList } from '../pages/fornecedores/SupplierList.jsx'
 import { CRMInteractions } from '../pages/crm/CRMInteractions.jsx'
 import { ExecutiveDashboard } from '../pages/analytics/ExecutiveDashboard.jsx'
 import { ReportsCenter } from '../pages/analytics/ReportsCenter.jsx'
+import { ProtectedRoute } from '../components/auth/ProtectedRoute.jsx'
+import { AccessDenied } from '../pages/auth/AccessDenied.jsx'
+import { ForgotPassword } from '../pages/auth/ForgotPassword.jsx'
+import { Login } from '../pages/auth/Login.jsx'
+import { Profile } from '../pages/auth/Profile.jsx'
+import { RoleManagement } from '../pages/auth/RoleManagement.jsx'
+import { UserManagement } from '../pages/auth/UserManagement.jsx'
 
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path="login" element={<Login />} />
+      <Route path="esqueci-senha" element={<ForgotPassword />} />
+      <Route path="acesso-negado" element={<AccessDenied />} />
+      <Route element={<ProtectedRoute />}>
       <Route element={<AppLayout />}>
         <Route index element={<Dashboard />} />
+        <Route path="perfil" element={<Profile />} />
         <Route path="estoque" element={<ProductList />} />
         <Route path="estoque/produtos/novo" element={<ProductForm />} />
         <Route path="estoque/movimentacoes" element={<StockMovement />} />
@@ -81,9 +93,12 @@ export function AppRoutes() {
         <Route path="dashboard/comercial" element={<ExecutiveDashboard type="comercial" title="Dashboard comercial" />} />
         <Route path="dashboard/operacional" element={<ExecutiveDashboard type="operacional" title="Dashboard operacional" />} />
         <Route path="relatorios" element={<ReportsCenter />} />
+        <Route path="seguranca/usuarios" element={<ProtectedRoute permission="accounts.usuario.gerenciar"><UserManagement /></ProtectedRoute>} />
+        <Route path="seguranca/perfis" element={<ProtectedRoute permission="accounts.perfil.gerenciar"><RoleManagement /></ProtectedRoute>} />
         {ERP_MODULES.filter((module) => !['/estoque', '/compras', '/financeiro', '/fiscal', '/ordens-servico', '/orcamentos', '/clientes', '/fornecedores', '/crm', '/relatorios'].includes(module.path)).map((module) => (
           <Route key={module.path} path={module.path.slice(1)} element={<ModulePage module={module} />} />
         ))}
+      </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
