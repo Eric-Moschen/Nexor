@@ -8,5 +8,5 @@ export const ERP_MODULES = [
   { name: 'Clientes', path: '/clientes', status: 'Implementado' },
   { name: 'Fornecedores', path: '/fornecedores', status: 'Implementado' },
   { name: 'CRM', path: '/crm', status: 'Implementado' },
-  { name: 'Relatorios', path: '/relatorios', status: 'Preparado' },
+  { name: 'Relatorios e BI', path: '/relatorios', status: 'Implementado' },
 ]

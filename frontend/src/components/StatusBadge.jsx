@@ -42,6 +42,9 @@ const toneByStatus = {
   transporte: 'bg-orange-50 text-orange-700',
   terceirizados: 'bg-amber-50 text-amber-700',
   outros: 'bg-slate-100 text-slate-700',
+  concluida: 'bg-emerald-50 text-emerald-700',
+  falhou: 'bg-red-50 text-red-700',
+  processando: 'bg-sky-50 text-sky-700',
 }
 
 export function StatusBadge({ status }) {
