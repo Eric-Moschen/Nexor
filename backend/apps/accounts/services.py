@@ -14,7 +14,7 @@ def get_client_ip(request):
 
 
 def registrar_auditoria(*, request=None, user=None, event, success=True, username_attempted="", metadata=None):
-    return AuthAuditLog.objects.create(
+    log = AuthAuditLog.objects.create(
         user=user,
         event=event,
         success=success,
@@ -23,6 +23,19 @@ def registrar_auditoria(*, request=None, user=None, event, success=True, usernam
         user_agent=request.META.get("HTTP_USER_AGENT", "") if request else "",
         metadata=metadata or {},
     )
+    if event in {AuthAuditLog.Event.LOGIN_SUCCESS, AuthAuditLog.Event.LOGIN_FAILED, AuthAuditLog.Event.LOGOUT}:
+        from apps.core.audit.services import AuditService
+        from apps.core.models import AuditLog
+
+        AuditService.register(
+            user=user,
+            action=AuditLog.Action.LOGIN,
+            module="accounts",
+            record=log,
+            ip_address=log.ip_address,
+            metadata={"event": event, "success": success, "username_attempted": username_attempted, **(metadata or {})},
+        )
+    return log
 
 
 @transaction.atomic

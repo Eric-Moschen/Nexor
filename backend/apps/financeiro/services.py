@@ -62,6 +62,18 @@ class FinanceiroService:
         )
         conta.valor_atual = self._saldo_apos_baixa(conta, baixa)
         self.atualizar_status_conta_pagar(conta)
+        if conta.valor_atual <= 0:
+            from apps.core.events.base import CONTA_PAGA, InternalEvent
+            from apps.core.events.dispatcher import EventDispatcher
+
+            EventDispatcher().publish(InternalEvent(
+                name=CONTA_PAGA,
+                module="financeiro",
+                aggregate_type="financeiro.ContaPagar",
+                aggregate_id=str(conta.id),
+                payload={"title": "Conta paga", "message": f"Conta a pagar {conta.numero_lancamento} quitada.", "baixa": baixa.id},
+                user=usuario,
+            ))
         return baixa
 
     @transaction.atomic
@@ -76,6 +88,18 @@ class FinanceiroService:
         )
         conta.valor_atual = self._saldo_apos_baixa(conta, baixa)
         self.atualizar_status_conta_receber(conta)
+        if conta.valor_atual <= 0:
+            from apps.core.events.base import CONTA_RECEBIDA, InternalEvent
+            from apps.core.events.dispatcher import EventDispatcher
+
+            EventDispatcher().publish(InternalEvent(
+                name=CONTA_RECEBIDA,
+                module="financeiro",
+                aggregate_type="financeiro.ContaReceber",
+                aggregate_id=str(conta.id),
+                payload={"title": "Conta recebida", "message": f"Conta a receber {conta.numero_lancamento} quitada.", "baixa": baixa.id},
+                user=usuario,
+            ))
         return baixa
 
     @transaction.atomic

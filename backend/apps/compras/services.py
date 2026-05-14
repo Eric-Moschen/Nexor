@@ -193,6 +193,17 @@ class ComprasService:
                     observacao=observacao or f"Recebimento do pedido {pedido.numero}",
                 )
         self._atualizar_status_recebimento(pedido)
+        from apps.core.events.base import InternalEvent, PEDIDO_RECEBIDO
+        from apps.core.events.dispatcher import EventDispatcher
+
+        EventDispatcher().publish(InternalEvent(
+            name=PEDIDO_RECEBIDO,
+            module="compras",
+            aggregate_type="compras.PedidoCompra",
+            aggregate_id=str(pedido.id),
+            payload={"title": "Pedido recebido", "message": f"Pedido {pedido.numero} recebido e integrado ao estoque.", "status": pedido.status},
+            user=usuario,
+        ))
         return pedido
 
     @transaction.atomic

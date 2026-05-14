@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom'
-import { Boxes, ChartNoAxesCombined, ClipboardList, FileText, Landmark, LayoutDashboard, MessagesSquare, ReceiptText, ShieldCheck, Truck, UserCog, Users } from 'lucide-react'
+import { Boxes, ChartNoAxesCombined, ClipboardList, FileText, GitBranch, Landmark, LayoutDashboard, MessagesSquare, ReceiptText, ShieldCheck, Truck, UserCog, Users } from 'lucide-react'
 
 const items = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/operacao', label: 'Operacao integrada', icon: GitBranch },
   { to: '/dashboard/financeiro', label: 'BI Financeiro', icon: ChartNoAxesCombined },
   { to: '/dashboard/estoque', label: 'BI Estoque', icon: ChartNoAxesCombined },
   { to: '/dashboard/comercial', label: 'BI Comercial', icon: ChartNoAxesCombined },

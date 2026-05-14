@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.auditoria.models import AuditoriaRecord
+from apps.core.serializers import AuditLogSerializer
 
 
 class AuditoriaRecordSerializer(serializers.ModelSerializer):

@@ -65,6 +65,8 @@ class OrcamentoService:
     @transaction.atomic
     def aprovar(self, *, orcamento_id, usuario):
         orcamento = self.repository.get_for_update(orcamento_id)
+        if not orcamento.cliente.is_active or getattr(orcamento.cliente, "status", "") == "bloqueado":
+            raise ValidationError("Cliente bloqueado ou inativo nao pode aprovar orcamento.")
         if orcamento.status == StatusOrcamento.CANCELADO:
             raise ValidationError("Orcamento cancelado nao pode ser aprovado.")
         if orcamento.status == StatusOrcamento.EXPIRADO or orcamento.data_validade < timezone.localdate():
@@ -125,6 +127,17 @@ class OrcamentoService:
         orcamento.updated_by = usuario
         orcamento.save(update_fields=["ordem_servico", "status", "updated_by", "updated_at"])
         self.registrar_historico(orcamento, TipoEventoOrcamento.CONVERSAO_OS, "Orcamento convertido em OS.", usuario=usuario, status_novo=StatusOrcamento.CONVERTIDO_OS, dados={"ordem_servico": ordem.id})
+        from apps.core.events.base import InternalEvent, ORCAMENTO_APROVADO
+        from apps.core.events.dispatcher import EventDispatcher
+
+        EventDispatcher().publish(InternalEvent(
+            name=ORCAMENTO_APROVADO,
+            module="orcamentos",
+            aggregate_type="orcamentos.Orcamento",
+            aggregate_id=str(orcamento.id),
+            payload={"title": "Orcamento convertido em OS", "message": f"Orcamento {orcamento.numero} gerou a OS {ordem.numero}.", "ordem_servico": ordem.id},
+            user=usuario,
+        ))
         return orcamento
 
     @transaction.atomic
