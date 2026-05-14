@@ -1,6 +1,7 @@
-import { Bell, LogOut, Shield, UserCircle } from 'lucide-react'
+import { LogOut, Shield, UserCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
+import { NotificationDropdown } from './global/NotificationDropdown.jsx'
 import { useAuth } from '../hooks/useAuth.js'
 
 export function Header() {
@@ -16,9 +17,7 @@ export function Header() {
           <UserCircle className="h-4 w-4" />
           {user?.first_name || user?.username || 'Usuario'}
         </Link>
-        <button className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-600 hover:bg-slate-50" title="Notificacoes">
-          <Bell className="h-4 w-4" />
-        </button>
+        <NotificationDropdown />
         <button className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-accent text-white hover:bg-violet-700" title="Seguranca">
           <Shield className="h-4 w-4" />
         </button>

@@ -64,7 +64,7 @@ class EstoqueService:
         produto.estoque_atual = saldo_posterior
         self.produto_repository.save_stock(produto)
 
-        return self.movimentacao_repository.create(
+        movimentacao = self.movimentacao_repository.create(
             produto=produto,
             tipo=tipo,
             quantidade=quantidade,
@@ -73,3 +73,16 @@ class EstoqueService:
             usuario_responsavel=usuario if getattr(usuario, "is_authenticated", False) else None,
             observacao=observacao,
         )
+        if produto.estoque_minimo > 0 and produto.estoque_atual <= produto.estoque_minimo:
+            from apps.core.events.base import ESTOQUE_BAIXO, InternalEvent
+            from apps.core.events.dispatcher import EventDispatcher
+
+            EventDispatcher().publish(InternalEvent(
+                name=ESTOQUE_BAIXO,
+                module="estoque",
+                aggregate_type="estoque.Produto",
+                aggregate_id=str(produto.id),
+                payload={"title": "Estoque baixo", "message": f"Produto {produto.nome} abaixo do minimo.", "saldo": str(produto.estoque_atual), "minimo": str(produto.estoque_minimo)},
+                user=usuario,
+            ))
+        return movimentacao

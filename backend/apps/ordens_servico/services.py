@@ -111,6 +111,17 @@ class OrdemServicoService:
         ordem.data_finalizacao = timezone.now()
         ordem = self._alterar_status(ordem, StatusOS.FINALIZADA, TipoEventoOS.FINALIZACAO, "OS finalizada.", usuario, save=False)
         ordem.save(update_fields=["status", "data_finalizacao", "updated_by", "updated_at"])
+        from apps.core.events.base import InternalEvent, OS_FINALIZADA
+        from apps.core.events.dispatcher import EventDispatcher
+
+        EventDispatcher().publish(InternalEvent(
+            name=OS_FINALIZADA,
+            module="ordens_servico",
+            aggregate_type="ordens_servico.OrdemServico",
+            aggregate_id=str(ordem.id),
+            payload={"title": "OS finalizada", "message": f"OS {ordem.numero} finalizada.", "custo_total": str(ordem.custo_total)},
+            user=usuario,
+        ))
         return ordem
 
     @transaction.atomic
@@ -154,6 +165,17 @@ class OrdemServicoService:
         ordem.updated_by = usuario
         ordem.save(update_fields=["conta_receber", "status", "updated_by", "updated_at"])
         self.registrar_historico(ordem, TipoEventoOS.FATURAMENTO, "OS faturada e conta a receber gerada.", usuario=usuario, dados={"conta_receber": conta.id})
+        from apps.core.events.base import InternalEvent, OS_FATURADA
+        from apps.core.events.dispatcher import EventDispatcher
+
+        EventDispatcher().publish(InternalEvent(
+            name=OS_FATURADA,
+            module="financeiro",
+            aggregate_type="ordens_servico.OrdemServico",
+            aggregate_id=str(ordem.id),
+            payload={"title": "OS faturada", "message": f"OS {ordem.numero} gerou conta a receber {conta.numero_lancamento}.", "conta_receber": conta.id},
+            user=usuario,
+        ))
         return ordem
 
     @transaction.atomic
@@ -181,6 +203,17 @@ class OrdemServicoService:
         )
         self.recalcular_totais(ordem)
         self.registrar_historico(ordem, TipoEventoOS.MATERIAL, f"Material utilizado: {produto.nome}", usuario=usuario, dados={"produto": produto.id, "quantidade": str(quantidade)})
+        from apps.core.events.base import InternalEvent, MATERIAL_OS_UTILIZADO
+        from apps.core.events.dispatcher import EventDispatcher
+
+        EventDispatcher().publish(InternalEvent(
+            name=MATERIAL_OS_UTILIZADO,
+            module="estoque",
+            aggregate_type="ordens_servico.MaterialUtilizadoOS",
+            aggregate_id=str(material.id),
+            payload={"ordem_servico": ordem.id, "produto": produto.id, "quantidade": str(quantidade)},
+            user=usuario,
+        ))
         return material
 
     @transaction.atomic

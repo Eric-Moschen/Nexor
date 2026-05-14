@@ -92,6 +92,17 @@ class FiscalService:
             mensagem = response.mensagem
         nota.save(update_fields=["status", "protocolo", "chave_acesso", "xml_autorizado", "motivo_rejeicao", "updated_at"])
         self.registrar_evento(nota, evento, mensagem, codigo=response.codigo, protocolo=response.protocolo, xml=response.xml_retorno, usuario=usuario)
+        from apps.core.events.base import InternalEvent, NFE_AUTORIZADA, NFE_REJEITADA
+        from apps.core.events.dispatcher import EventDispatcher
+
+        EventDispatcher().publish(InternalEvent(
+            name=NFE_AUTORIZADA if response.autorizado else NFE_REJEITADA,
+            module="fiscal",
+            aggregate_type="fiscal.NotaFiscal",
+            aggregate_id=str(nota.id),
+            payload={"title": "NFe autorizada" if response.autorizado else "NFe rejeitada", "message": mensagem, "valor_total": str(nota.valor_total), "protocolo": response.protocolo},
+            user=usuario,
+        ))
         return nota
 
     @transaction.atomic

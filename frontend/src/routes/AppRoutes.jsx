@@ -38,6 +38,7 @@ import { SupplierList } from '../pages/fornecedores/SupplierList.jsx'
 import { CRMInteractions } from '../pages/crm/CRMInteractions.jsx'
 import { ExecutiveDashboard } from '../pages/analytics/ExecutiveDashboard.jsx'
 import { ReportsCenter } from '../pages/analytics/ReportsCenter.jsx'
+import { IntegratedOperations } from '../pages/global/IntegratedOperations.jsx'
 import { ProtectedRoute } from '../components/auth/ProtectedRoute.jsx'
 import { AccessDenied } from '../pages/auth/AccessDenied.jsx'
 import { ForgotPassword } from '../pages/auth/ForgotPassword.jsx'
@@ -55,6 +56,7 @@ export function AppRoutes() {
       <Route element={<ProtectedRoute />}>
       <Route element={<AppLayout />}>
         <Route index element={<Dashboard />} />
+        <Route path="operacao" element={<IntegratedOperations />} />
         <Route path="perfil" element={<Profile />} />
         <Route path="estoque" element={<ProductList />} />
         <Route path="estoque/produtos/novo" element={<ProductForm />} />
