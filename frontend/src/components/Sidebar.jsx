@@ -1,8 +1,12 @@
 import { NavLink } from 'react-router-dom'
-import { Boxes, ClipboardList, FileText, Landmark, LayoutDashboard, MessagesSquare, ReceiptText, ShieldCheck, Truck, Users } from 'lucide-react'
+import { Boxes, ChartNoAxesCombined, ClipboardList, FileText, Landmark, LayoutDashboard, MessagesSquare, ReceiptText, ShieldCheck, Truck, Users } from 'lucide-react'
 
 const items = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/dashboard/financeiro', label: 'BI Financeiro', icon: ChartNoAxesCombined },
+  { to: '/dashboard/estoque', label: 'BI Estoque', icon: ChartNoAxesCombined },
+  { to: '/dashboard/comercial', label: 'BI Comercial', icon: ChartNoAxesCombined },
+  { to: '/dashboard/operacional', label: 'BI Operacional', icon: ChartNoAxesCombined },
   { to: '/estoque', label: 'Estoque', icon: Boxes },
   { to: '/estoque/movimentacoes', label: 'Movimentar estoque', icon: ClipboardList },
   { to: '/estoque/historico', label: 'Historico estoque', icon: FileText },

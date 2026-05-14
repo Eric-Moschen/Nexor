@@ -126,6 +126,13 @@ CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND", default="redis://localho
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": config("REDIS_CACHE_URL", default=config("REDIS_URL", default="redis://localhost:6379/2")),
+    }
+}
+
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"
 SESSION_COOKIE_HTTPONLY = True

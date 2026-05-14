@@ -36,6 +36,8 @@ import { CustomerList } from '../pages/clientes/CustomerList.jsx'
 import { SupplierForm } from '../pages/fornecedores/SupplierForm.jsx'
 import { SupplierList } from '../pages/fornecedores/SupplierList.jsx'
 import { CRMInteractions } from '../pages/crm/CRMInteractions.jsx'
+import { ExecutiveDashboard } from '../pages/analytics/ExecutiveDashboard.jsx'
+import { ReportsCenter } from '../pages/analytics/ReportsCenter.jsx'
 
 export function AppRoutes() {
   return (
@@ -74,7 +76,12 @@ export function AppRoutes() {
         <Route path="fornecedores" element={<SupplierList />} />
         <Route path="fornecedores/novo" element={<SupplierForm />} />
         <Route path="crm" element={<CRMInteractions />} />
-        {ERP_MODULES.filter((module) => !['/estoque', '/compras', '/financeiro', '/fiscal', '/ordens-servico', '/orcamentos', '/clientes', '/fornecedores', '/crm'].includes(module.path)).map((module) => (
+        <Route path="dashboard/financeiro" element={<ExecutiveDashboard type="financeiro" title="Dashboard financeiro" />} />
+        <Route path="dashboard/estoque" element={<ExecutiveDashboard type="estoque" title="Dashboard estoque" />} />
+        <Route path="dashboard/comercial" element={<ExecutiveDashboard type="comercial" title="Dashboard comercial" />} />
+        <Route path="dashboard/operacional" element={<ExecutiveDashboard type="operacional" title="Dashboard operacional" />} />
+        <Route path="relatorios" element={<ReportsCenter />} />
+        {ERP_MODULES.filter((module) => !['/estoque', '/compras', '/financeiro', '/fiscal', '/ordens-servico', '/orcamentos', '/clientes', '/fornecedores', '/crm', '/relatorios'].includes(module.path)).map((module) => (
           <Route key={module.path} path={module.path.slice(1)} element={<ModulePage module={module} />} />
         ))}
       </Route>
