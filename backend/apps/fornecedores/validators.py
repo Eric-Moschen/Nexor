@@ -1,6 +1,4 @@
-from django.core.exceptions import ValidationError
+from apps.clientes.validators import normalize_documento, validate_documento, validate_email, validate_ie, validate_required_name
 
 
-def validate_required_name(value):
-    if not value or not value.strip():
-        raise ValidationError("O nome e obrigatorio.")
+__all__ = ["normalize_documento", "validate_documento", "validate_email", "validate_ie", "validate_required_name"]

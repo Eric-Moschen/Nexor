@@ -55,6 +55,6 @@ export async function listCostCenters() {
 }
 
 export async function listCustomers() {
-  const { data } = await apiClient.get('/clientes/clientes/')
+  const { data } = await apiClient.get('/clientes/')
   return normalizeList(data)
 }

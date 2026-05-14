@@ -30,6 +30,12 @@ import { ServiceOrderList } from '../pages/ordensServico/ServiceOrderList.jsx'
 import { BudgetDetail } from '../pages/orcamentos/BudgetDetail.jsx'
 import { BudgetForm } from '../pages/orcamentos/BudgetForm.jsx'
 import { BudgetList } from '../pages/orcamentos/BudgetList.jsx'
+import { CustomerDetail } from '../pages/clientes/CustomerDetail.jsx'
+import { CustomerForm } from '../pages/clientes/CustomerForm.jsx'
+import { CustomerList } from '../pages/clientes/CustomerList.jsx'
+import { SupplierForm } from '../pages/fornecedores/SupplierForm.jsx'
+import { SupplierList } from '../pages/fornecedores/SupplierList.jsx'
+import { CRMInteractions } from '../pages/crm/CRMInteractions.jsx'
 
 export function AppRoutes() {
   return (
@@ -62,7 +68,13 @@ export function AppRoutes() {
         <Route path="orcamentos" element={<BudgetList />} />
         <Route path="orcamentos/novo" element={<BudgetForm />} />
         <Route path="orcamentos/:id" element={<BudgetDetail />} />
-        {ERP_MODULES.filter((module) => !['/estoque', '/compras', '/financeiro', '/fiscal', '/ordens-servico', '/orcamentos'].includes(module.path)).map((module) => (
+        <Route path="clientes" element={<CustomerList />} />
+        <Route path="clientes/novo" element={<CustomerForm />} />
+        <Route path="clientes/:id" element={<CustomerDetail />} />
+        <Route path="fornecedores" element={<SupplierList />} />
+        <Route path="fornecedores/novo" element={<SupplierForm />} />
+        <Route path="crm" element={<CRMInteractions />} />
+        {ERP_MODULES.filter((module) => !['/estoque', '/compras', '/financeiro', '/fiscal', '/ordens-servico', '/orcamentos', '/clientes', '/fornecedores', '/crm'].includes(module.path)).map((module) => (
           <Route key={module.path} path={module.path.slice(1)} element={<ModulePage module={module} />} />
         ))}
       </Route>
