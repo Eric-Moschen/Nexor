@@ -1,12 +1,9 @@
-from apps.core.permissions import HasModulePermission
+from apps.clientes.permissions import CanManageRelacionamento, CanViewRelacionamento
 
 
-class CanManageFornecedores(HasModulePermission):
-    allowed_roles = {"administrador", "compras", "financeiro", "supervisor"}
+class CanViewFornecedores(CanViewRelacionamento):
+    pass
 
-    def has_permission(self, request, view):
-        if not super().has_permission(request, view):
-            return False
-        if request.user.is_superuser:
-            return True
-        return getattr(request.user, "role", None) in self.allowed_roles
+
+class CanManageFornecedores(CanManageRelacionamento):
+    allowed_roles = {"administrador", "compras", "supervisor"}

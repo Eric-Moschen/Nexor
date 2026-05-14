@@ -21,7 +21,6 @@ const toneByStatus = {
   denegada: 'bg-red-100 text-red-800',
   aberta: 'bg-sky-50 text-sky-700',
   em_aprovacao: 'bg-amber-50 text-amber-700',
-  aprovada: 'bg-emerald-50 text-emerald-700',
   em_execucao: 'bg-indigo-50 text-indigo-700',
   pausada: 'bg-orange-50 text-orange-700',
   finalizada: 'bg-slate-100 text-slate-700',
@@ -32,6 +31,17 @@ const toneByStatus = {
   reprovado: 'bg-red-50 text-red-700',
   expirado: 'bg-orange-50 text-orange-700',
   convertido_os: 'bg-indigo-50 text-indigo-700',
+  ativo: 'bg-emerald-50 text-emerald-700',
+  inativo: 'bg-slate-100 text-slate-600',
+  bloqueado: 'bg-red-50 text-red-700',
+  em_andamento: 'bg-amber-50 text-amber-700',
+  finalizado: 'bg-slate-100 text-slate-700',
+  materia_prima: 'bg-sky-50 text-sky-700',
+  ferramentas: 'bg-indigo-50 text-indigo-700',
+  servicos: 'bg-violet-50 text-violet-700',
+  transporte: 'bg-orange-50 text-orange-700',
+  terceirizados: 'bg-amber-50 text-amber-700',
+  outros: 'bg-slate-100 text-slate-700',
 }
 
 export function StatusBadge({ status }) {

@@ -5,7 +5,8 @@ export const ERP_MODULES = [
   { name: 'Fiscal', path: '/fiscal', status: 'Implementado' },
   { name: 'Ordens de Servico', path: '/ordens-servico', status: 'Implementado' },
   { name: 'Orcamentos', path: '/orcamentos', status: 'Implementado' },
-  { name: 'Clientes', path: '/clientes', status: 'Preparado' },
-  { name: 'Fornecedores', path: '/fornecedores', status: 'Preparado' },
+  { name: 'Clientes', path: '/clientes', status: 'Implementado' },
+  { name: 'Fornecedores', path: '/fornecedores', status: 'Implementado' },
+  { name: 'CRM', path: '/crm', status: 'Implementado' },
   { name: 'Relatorios', path: '/relatorios', status: 'Preparado' },
 ]
