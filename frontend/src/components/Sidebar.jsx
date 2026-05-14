@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Boxes, ChartNoAxesCombined, ClipboardList, FileText, Landmark, LayoutDashboard, MessagesSquare, ReceiptText, ShieldCheck, Truck, Users } from 'lucide-react'
+import { Boxes, ChartNoAxesCombined, ClipboardList, FileText, Landmark, LayoutDashboard, MessagesSquare, ReceiptText, ShieldCheck, Truck, UserCog, Users } from 'lucide-react'
 
 const items = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -23,6 +23,8 @@ const items = [
   { to: '/clientes', label: 'Clientes', icon: Users },
   { to: '/crm', label: 'CRM', icon: MessagesSquare },
   { to: '/fornecedores', label: 'Fornecedores', icon: Truck },
+  { to: '/seguranca/usuarios', label: 'Usuarios', icon: UserCog },
+  { to: '/seguranca/perfis', label: 'Perfis', icon: ShieldCheck },
   { to: '/relatorios', label: 'Relatorios', icon: FileText },
 ]
 
