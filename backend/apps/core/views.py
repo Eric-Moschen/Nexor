@@ -1,3 +1,6 @@
+from celery import current_app
+from django.core.cache import cache
+from django.db import connection
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from rest_framework.views import APIView
@@ -14,7 +17,40 @@ class HealthCheckView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        return success_response({"status": "ok"}, message="Nexor ERP API operacional.")
+        return success_response(
+            {
+                "status": "online",
+                "service": "Nexor ERP",
+                "database": "ok" if _database_ok() else "error",
+                "redis": "ok" if _redis_ok() else "error",
+                "celery": "ok" if _celery_ok() else "unavailable",
+            },
+            message="Nexor ERP API operacional.",
+        )
+
+
+class DatabaseHealthView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        online = _database_ok()
+        return success_response({"status": "online" if online else "offline", "database": "ok" if online else "error"})
+
+
+class RedisHealthView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        online = _redis_ok()
+        return success_response({"status": "online" if online else "offline", "redis": "ok" if online else "error"})
+
+
+class CeleryHealthView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        online = _celery_ok()
+        return success_response({"status": "online" if online else "offline", "celery": "ok" if online else "unavailable"})
 
 
 class EventLogViewSet(ReadOnlyModelViewSet):
@@ -45,3 +81,28 @@ class NotificationViewSet(ReadOnlyModelViewSet):
         notification = self.get_object()
         NotificationService.mark_read(notification, user=request.user)
         return success_response(self.get_serializer(notification).data, message="Notificacao marcada como lida.")
+
+
+def _database_ok():
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            return cursor.fetchone()[0] == 1
+    except Exception:
+        return False
+
+
+def _redis_ok():
+    try:
+        cache.set("nexor:health", "ok", timeout=5)
+        return cache.get("nexor:health") == "ok"
+    except Exception:
+        return False
+
+
+def _celery_ok():
+    try:
+        inspector = current_app.control.inspect(timeout=1)
+        return bool(inspector.ping() or {})
+    except Exception:
+        return False
