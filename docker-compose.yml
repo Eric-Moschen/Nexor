@@ -19,8 +19,11 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    command: redis-server --appendonly yes
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -30,11 +33,14 @@ services:
   backend:
     build:
       context: ./backend
+      args:
+        REQUIREMENTS_FILE: local.txt
     command: python manage.py runserver 0.0.0.0:8000
     env_file:
-      - ./.env.example
+      - ${NEXOR_ENV_FILE:-./.env}
     volumes:
       - ./backend:/app
+      - ./logs:/logs
     ports:
       - "8000:8000"
     depends_on:
@@ -42,15 +48,23 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/api/v1/health/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   celery:
     build:
       context: ./backend
+      args:
+        REQUIREMENTS_FILE: local.txt
     command: celery -A config worker -l info
     env_file:
-      - ./.env.example
+      - ${NEXOR_ENV_FILE:-./.env}
     volumes:
       - ./backend:/app
+      - ./logs:/logs
     depends_on:
       - backend
       - redis
@@ -58,11 +72,14 @@ services:
   celery-beat:
     build:
       context: ./backend
+      args:
+        REQUIREMENTS_FILE: local.txt
     command: celery -A config beat -l info
     env_file:
-      - ./.env.example
+      - ${NEXOR_ENV_FILE:-./.env}
     volumes:
       - ./backend:/app
+      - ./logs:/logs
     depends_on:
       - backend
       - redis
@@ -70,6 +87,7 @@ services:
   frontend:
     build:
       context: ./frontend
+      target: development
     environment:
       VITE_API_BASE_URL: http://localhost:8000/api/v1
     volumes:
@@ -82,3 +100,4 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:

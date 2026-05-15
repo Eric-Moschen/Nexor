@@ -4,6 +4,7 @@ from pathlib import Path
 from decouple import Csv, config
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+LOG_DIR = BASE_DIR.parent / "logs"
 
 SECRET_KEY = config("DJANGO_SECRET_KEY", default="unsafe-dev-key-change-me")
 DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
@@ -133,6 +134,12 @@ CELERY_BROKER_URL = config("CELERY_BROKER_URL", default=config("REDIS_URL", defa
 CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND", default="redis://localhost:6379/1")
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_TASK_DEFAULT_QUEUE = config("CELERY_TASK_DEFAULT_QUEUE", default="nexor.default")
+CELERY_TASK_ROUTES = {
+    "apps.core.tasks.*": {"queue": "nexor.core"},
+    "apps.fiscal.tasks.*": {"queue": "nexor.fiscal"},
+    "apps.relatorios.tasks.*": {"queue": "nexor.relatorios"},
+}
 
 CACHES = {
     "default": {
@@ -146,3 +153,45 @@ SECURE_REFERRER_POLICY = "same-origin"
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = "DENY"
+
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+(LOG_DIR / "django").mkdir(parents=True, exist_ok=True)
+(LOG_DIR / "celery").mkdir(parents=True, exist_ok=True)
+(LOG_DIR / "audit").mkdir(parents=True, exist_ok=True)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "structured": {
+            "format": "{asctime} {levelname} {name} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "structured",
+        },
+        "django_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": LOG_DIR / "django" / "nexor.log",
+            "maxBytes": 10 * 1024 * 1024,
+            "backupCount": 5,
+            "formatter": "structured",
+        },
+        "audit_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": LOG_DIR / "audit" / "audit.log",
+            "maxBytes": 10 * 1024 * 1024,
+            "backupCount": 10,
+            "formatter": "structured",
+        },
+    },
+    "loggers": {
+        "django": {"handlers": ["console", "django_file"], "level": config("DJANGO_LOG_LEVEL", default="INFO"), "propagate": False},
+        "apps": {"handlers": ["console", "django_file"], "level": config("APP_LOG_LEVEL", default="INFO"), "propagate": False},
+        "audit": {"handlers": ["audit_file"], "level": "INFO", "propagate": False},
+    },
+    "root": {"handlers": ["console"], "level": "INFO"},
+}
